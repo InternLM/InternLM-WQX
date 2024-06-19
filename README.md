@@ -21,7 +21,7 @@ InternLM2-WQX-20B <a href="https://huggingface.co/internlm/internlm2-wqx-20b">�
 
 # Introduction
 
-InternLM2-WQX与InternLM2-WQX-VL是InternLM团队在2024年高考前夕最新推出的文曲星系列模型。
+InternLM2-WQX与InternLM2-WQX-VL是InternLM团队于2024年高考前夕最新推出的文曲星系列模型。
 
 高考覆盖各类学科及题型，同时因其开考前的“绝密性”，被视作中国最具权威的考试之一，成为评估考生综合能力的“试金石”。这一面向人类设计的高难度综合性测试，目前普遍被研究者用于考察大模型的智能水平。InternLM2-WQX系列模型在2024年高考评测集[GAOKAO-Eval](https://github.com/open-compass/GAOKAO-Eval)上取得了优异的成绩，综合表现与GPT-4o相当，且超越了国内外一系列开源大模型，体现了InternLM2-WQX系列模型优秀的性能。
 
