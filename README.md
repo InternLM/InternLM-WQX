@@ -28,7 +28,16 @@ InternLM2-WQX与InternLM2-WQX-VL是InternLM团队于2024年高考前夕最新推
 我们即将更新关于文曲星系列模型数据准备的相关说明，敬请期待。
 
 
-# MD5 Check
+# Model Zoo
+
+
+| Model                       | HuggingFace                          | ModelScope                           | Release Date |
+| --------------------------- | ----------------------------------------- | ---------------------------------------- | ------------ |
+| **InternLM2-WQX-20B**          | [🤗internlm2-wqx-20b](https://huggingface.co/internlm/internlm2-wqx-20b) | [<img src="./assets/modelscope_logo.png" width="20px" /> internlm2-wqx-20b](https://modelscope.cn/models/Shanghai_AI_Laboratory/internlm2-wqx-20b/summary) | 2024-06-04   |
+| **InternLM2-WQX-VL-20B**          | [🤗internlm2-wqx-vl-20b](https://huggingface.co/internlm/internlm2-wqx-vl-20b) | [<img src="./assets/modelscope_logo.png" width="20px" /> internlm2-wqx-vl-20b](https://modelscope.cn/models/Shanghai_AI_Laboratory/internlm2-wqx-vl-20b/summary) | 2024-06-04   |
+
+
+## MD5 Check
 
 ### LLM权重文件的md5值
 ```
