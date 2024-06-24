@@ -61,6 +61,71 @@ eaa393a66dc632d0a6f0f7d815c439bb  ./pytorch_model-00004-of-00005.bin
 97b05f40ee9826eda467489eed65f85c  ./clip_l_560_pro7b/pytorch_model.bin
 ```
 
+# Quick Start
+
+### 快速调用**InternLM2-WQX-20B**语言模型
+
+使用transformers 后端进行推理
+
+```python
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+device = "cuda"
+
+tokenizer = AutoTokenizer.from_pretrained("internlm/internlm2-wqx-20b", trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(
+    "internlm/internlm2-wqx-20b",
+    torch_dtype=torch.bfloat16,
+    trust_remote_code=True
+).to(device).eval()
+
+query = "已知圆柱和圆锥的底面半径相等，侧面积相等，且它们的高均为$ \\sqrt { 3 }$，则圆锥的体积为（ ）．\nA. $ 2 \\sqrt { 3 } \\pi$\nB. $ 3 \\sqrt { 3 } \\pi$\nC. $ 6 \\sqrt { 3 } \\pi$\nD. $ 9 \\sqrt { 3 } \\pi$"
+
+inputs = tokenizer(query, return_tensors="pt")
+
+inputs = inputs["input_ids"].to(device)
+
+gen_kwargs = {"max_length": 1024, "do_sample": False}
+
+outputs = model.generate(inputs, **gen_kwargs)
+outputs = outputs[0].cpu().tolist()[len(inputs[0]) :]
+
+response = tokenizer.decode(outputs, skip_special_tokens=True)
+print(response)
+```
+
+使用vllm 后端进行推理：
+
+```python
+from vllm import LLM, SamplingParams
+
+model_name = "internlm/internlm2-wqx-20b"
+prompts = ["已知圆柱和圆锥的底面半径相等，侧面积相等，且它们的高均为$ \\sqrt { 3 }$，则圆锥的体积为（ ）．\nA. $ 2 \\sqrt { 3 } \\pi$\nB. $ 3 \\sqrt { 3 } \\pi$\nC. $ 6 \\sqrt { 3 } \\pi$\nD. $ 9 \\sqrt { 3 } \\pi$"]
+sampling_params = SamplingParams(temperature=0.0, max_tokens=1024)
+
+llm = LLM(
+    model=model_name,
+    trust_remote_code=True,
+    enforce_eager=True,
+)
+
+outputs = llm.generate(prompts, sampling_params)
+
+for output in outputs:
+    prompt = output.prompt
+    generated_text = output.outputs[0].text
+    print(f"Prompt: {prompt!r}, \nGenerated text: {generated_text!r}")
+```
+
+### **InternLM2-WQX-20B**语言模型的 Web UI
+
+使用transformers后端进行推理：
+
+```
+python basic_demo/web_ui_wqx.py -m internlm/internlm2-wqx-20b
+```
+
 # Citation
 
 ```bibtex
