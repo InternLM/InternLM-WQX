@@ -126,6 +126,42 @@ for output in outputs:
 python basic_demo/web_ui_wqx.py -m internlm/internlm2-wqx-20b
 ```
 
+### 快速调用**InternLM2-WQX-VL-20B**视觉语言模型
+
+使用transformers后端进行推理:
+
+```python
+from PIL import Image
+from io import BytesIO
+import requests
+from transformers import AutoModel, AutoTokenizer, AutoModelForCausalLM
+import torch
+from infer_wqx_vl import process_query_and_image, HD_transform
+
+model_path = "internlm/internlm2-wqx-vl-20b"
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_path, torch_dtype=torch.bfloat16, trust_remote_code=True).cuda().eval()
+model.cuda().half()
+model.tokenizer = tokenizer
+
+image_url = "https://ks-1302698447.cos.ap-shanghai.myqcloud.com/img/phymerge.png"
+query = "体育课上两位同学在室内羽毛球场进行羽毛球比赛，羽毛球在空中上升的运动轨迹如图中虚线所示，考虑空气阻力，羽毛球加速度方向示意图可能正确的是（\u3000\u3000） \nA:<IMAGE 0>  \nB: <IMAGE 1>  \nC:<IMAGE 2>  \nD:<IMAGE 3> "
+
+response = requests.get(image_url)
+image = Image.open(BytesIO(response.content))
+embeds, im_mask = process_query_and_image(query, image, model, HD_transform)
+
+outputs = model.generate(inputs_embeds=embeds, im_mask=im_mask,
+                            temperature=0.0, max_new_tokens=256, num_beams=1,
+                            do_sample=False, repetition_penalty=1.0)
+output_token = outputs[0]
+output_text = model.tokenizer.decode(output_token, add_special_tokens=False)
+print(output_text)
+#  <s> 斜向下
+# 答案是：C</s>
+```
+针对这个选项里面有图片的考题，我们将图片进行了合并并标记上`<IMAGE {id}>`来让语言模型能理解多图考题。 当前示例展示的是已经拼接好的图片，详细的图像预处理请参考[GAOKAO-Eval](https://github.com/open-compass/GAOKAO-Eval)中的多模态处理工具。
+
 # Citation
 
 ```bibtex
