@@ -162,6 +162,14 @@ print(output_text)
 ```
 针对这个选项里面有图片的考题，我们将图片进行了合并并标记上`<IMAGE {id}>`来让语言模型能理解多图考题。 当前示例展示的是已经拼接好的图片，详细的图像预处理请参考[GAOKAO-Eval](https://github.com/open-compass/GAOKAO-Eval)中的多模态处理工具。
 
+### **InternLM2-WQX-VL-20B**语言模型的 Web UI
+
+使用transformers后端进行推理：
+
+```
+python web_ui_wqx_vl.py -m internlm/internlm2-wqx-vl-20b
+```
+
 # Citation
 
 ```bibtex
