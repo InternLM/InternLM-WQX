@@ -123,7 +123,7 @@ for output in outputs:
 使用transformers后端进行推理：
 
 ```
-python basic_demo/web_ui_wqx.py -m internlm/internlm2-wqx-20b
+python web_ui_wqx.py -m internlm/internlm2-wqx-20b
 ```
 
 ### 快速调用**InternLM2-WQX-VL-20B**视觉语言模型
